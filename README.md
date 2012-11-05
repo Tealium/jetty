@@ -6,7 +6,7 @@ Installs and configures Jetty, Java servlet engine and webserver.
 Requirements
 ============
 
-Platform: 
+Platform:
 
 * Debian, Ubuntu (OpenJDK, Sun)
 * CentOS, Red Hat, Fedora (OpenJDK)
