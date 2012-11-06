@@ -42,9 +42,10 @@ end
 end
 
 #downloading the Jetty .tar file from URL link we specified in the Attribute file
-remote_file "#{opt_dir}#{node[:jetty][:jetty_version]}" do
+remote_file "#{opt_dir}#{node[:jetty][:jetty_version]}.tar.gz" do
   source node[:jetty][:jetty_url]
   mode 0775
+  action :create_if_missing
 end
 
 #running a bash script to untar the .tar.gz Jetty file and move directories to appropriate locations
@@ -53,14 +54,14 @@ bash "Installing Jetty 8 because Tealium is the bomb" do
   cwd "/opt"
   code <<-BASH_SCRIPT
   mkdir -p #{node[:jetty][:lib_dir]}
-  tar xfz #{node[:jetty][:jetty_version]}
+  tar xfz #{node[:jetty][:jetty_version]}.tar.gz
   cd #{node[:jetty][:jetty_version]}
   mv #{opt_dir}#{node[:jetty][:jetty_version]}/logs #{node[:jetty][:log_dir]}
   mv #{opt_dir}#{node[:jetty][:jetty_version]}/etc #{node[:jetty][:config_dir]}
   mv #{opt_dir}#{node[:jetty][:jetty_version]}/webapps #{node[:jetty][:webapps_dir]}
   mv #{opt_dir}#{node[:jetty][:jetty_version]}/contexts #{node[:jetty][:contexts_dir]}
   BASH_SCRIPT
-  only_if do
+  not_if do
     File.exists?("/opt/#{node[:jetty][:jetty_version]}")
   end
 end
