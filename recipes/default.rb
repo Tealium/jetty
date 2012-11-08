@@ -31,7 +31,7 @@ group node[:jetty][:group] do
 end
 
 #creating the necessary directories that Jetty will need to be installed correctly
-%w{node[:jetty][:log_dir] node[:jetty][:contexts_dir] node[:jetty][:config_dir]}.each do |dir|
+[ node[:jetty][:log_dir], node[:jetty][:contexts_dir], node[:jetty][:config_dir], node[:jetty][:lib_dir] ].each do |dir|
     directory dir do
      mode 0775
      owner node[:jetty][:user]
@@ -53,7 +53,6 @@ bash "Installing Jetty 8 because Tealium is the bomb" do
   user "root"
   cwd "/opt"
   code <<-BASH_SCRIPT
-  mkdir -p #{node[:jetty][:lib_dir]}
   tar xfz #{node[:jetty][:jetty_version]}.tar.gz
   cd #{node[:jetty][:jetty_version]}
   mv #{opt_dir}#{node[:jetty][:jetty_version]}/logs #{node[:jetty][:log_dir]}
