@@ -30,7 +30,7 @@ default["jetty"]["java_environment_variables"]["java.net.preferIPv4Stack"] = "tr
 default["jetty"]["java_environment_variables"]["java.awt.headless"] = "true"
 
 default["jetty"]["jetty_version"] = "jetty-distribution-8.1.7.v20120910"
-default["jetty"]["jetty_url"] = "http://download.eclipse.org/jetty/stable-8/dist/jetty-distribution-8.1.7.v20120910.tar.gz"
+default["jetty"]["jetty_url"] = "http://download.eclipse.org/jetty/8.1.7.v20120910/dist/jetty-distribution-8.1.7.v20120910.tar.gz"
 
 case platform
 when "ubuntu", "debian"
