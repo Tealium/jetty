@@ -57,6 +57,7 @@ bash "Installing Jetty 8 because Tealium is the bomb" do
   cd #{node[:jetty][:jetty_version]}
   mv #{opt_dir}#{node[:jetty][:jetty_version]}/logs #{node[:jetty][:log_dir]}
   mv #{opt_dir}#{node[:jetty][:jetty_version]}/etc/* #{node[:jetty][:config_dir]}
+  rm -rf  #{opt_dir}#{node[:jetty][:jetty_version]}/etc
   mv #{opt_dir}#{node[:jetty][:jetty_version]}/webapps #{node[:jetty][:webapps_dir]}
   mv #{opt_dir}#{node[:jetty][:jetty_version]}/contexts #{node[:jetty][:contexts_dir]}
   BASH_SCRIPT
