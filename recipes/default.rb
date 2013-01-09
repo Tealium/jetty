@@ -48,6 +48,17 @@ remote_file "#{opt_dir}#{node[:jetty][:jetty_version]}.tar.gz" do
   action :create_if_missing
 end
 
+#changing the directory user to jetty 
+%w{node[:jetty][:config_dir] node[:jetty][:webapps_dir] node[:jetty][:contexts_dir] opt_dir + node[:jetty][:jetty_version]}.each do |dir|
+  directory dir do
+    mode 0775
+    owner node[:jetty][:user]
+    group node[:jetty][:group]
+     recursive true
+  end
+
+end
+
 #running a bash script to untar the .tar.gz Jetty file and move directories to appropriate locations
 bash "Installing Jetty 8 because Tealium is the bomb" do
   user "root"
@@ -66,15 +77,15 @@ bash "Installing Jetty 8 because Tealium is the bomb" do
   end
 end
 
-#changing the directory user to jetty 
-%w{node[:jetty][:config_dir] node[:jetty][:webapps_dir] node[:jetty][:contexts_dir] opt_dir + node[:jetty][:jetty_version]}.each do |dir|
-  directory dir do
-    mode 0775
-    owner node[:jetty][:user]
-    group node[:jetty][:group]
-     recursive true
-  end
-
+#remove all but a few files in the webapps folder.
+bash "Removing files from webapps" do
+  user "root"
+  cwd "/opt"
+  code <<-BASH_SCRIPT
+  cd #{node[:jetty][:webapps_dir]}
+  rm -rf root
+  rm -rf test-*
+  BASH_SCRIPT
 end
 
 #creating symbolic link
