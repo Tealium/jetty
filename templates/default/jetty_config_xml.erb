@@ -67,6 +67,15 @@
     </Set>
 
     <!-- =========================================================== -->
+    <!-- Set preventor to avoid memory leaks                         -->
+    <!-- =========================================================== -->
+   <Call name="addBean">
+    <Arg>
+      <New class="org.eclipse.jetty.util.preventers.AppContextLeakPreventer"/>
+    </Arg>
+   </Call>
+
+    <!-- =========================================================== -->
     <!-- extra options                                               -->
     <!-- =========================================================== -->
     <Set name="stopAtShutdown">true</Set>

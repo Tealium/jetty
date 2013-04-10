@@ -20,7 +20,12 @@ default["jetty"]["host"] = "0.0.0.0"
 default["jetty"]["port"] = "8085"
 default["jetty"]["no_start"] = 0
 default["jetty"]["jetty_args"] = ""
-default["jetty"]["java_options"] = %w{--exec -Xmx2048m}
+default["jetty"]["java_options"] = %w{
+  --exec 
+  -Xmx2048m 
+  -Xmn512m 
+  XX:+UseConcMarkSweepGC
+  -XX:+ExplicitGCInvokesConcurrent}
 default["jetty"]["mongo_host"] = ""
 
 default["jetty"]["user"] = "jetty"
