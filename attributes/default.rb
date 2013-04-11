@@ -24,7 +24,7 @@ default["jetty"]["java_options"] = %w{
   --exec 
   -Xmx2048m 
   -Xmn512m 
-  XX:+UseConcMarkSweepGC
+  -XX:+UseConcMarkSweepGC
   -XX:+ExplicitGCInvokesConcurrent}
 default["jetty"]["mongo_host"] = ""
 
