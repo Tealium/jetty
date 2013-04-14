@@ -75,6 +75,14 @@
     </Arg>
    </Call>
 
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- Max Form Size                                                   -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <Call class="java.lang.System" name="setProperty">
+      <Arg>org.eclipse.jetty.server.Request.maxFormContentSize</Arg>
+      <Arg>500000</Arg>
+    </Call>
+
     <!-- =========================================================== -->
     <!-- extra options                                               -->
     <!-- =========================================================== -->
