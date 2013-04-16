@@ -67,21 +67,21 @@
     </Set>
 
     <!-- =========================================================== -->
-    <!-- Set preventor to avoid memory leaks                         -->
-    <!-- =========================================================== -->
-   <Call name="addBean">
-    <Arg>
-      <New class="org.eclipse.jetty.util.preventers.AppContextLeakPreventer"/>
-    </Arg>
-   </Call>
+    <!-- Set preventor to avoid memory leaks                         -->
+    <!-- =========================================================== -->
+    <Call name="addBean">
+      <Arg>
+        <New class="org.eclipse.jetty.util.preventers.AppContextLeakPreventer"/>
+      </Arg>
+    </Call>
 
-    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-    <!-- Max Form Size                                                   -->
-    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- =========================================================== -->
+    <!-- Set Max Form Size                                           -->
+    <!-- =========================================================== -->
     <Call class="java.lang.System" name="setProperty">
-      <Arg>org.eclipse.jetty.server.Request.maxFormContentSize</Arg>
-      <Arg>500000</Arg>
-    </Call>
+      <Arg>org.eclipse.jetty.server.Request.maxFormContentSize</Arg>
+      <Arg>500000</Arg>
+    </Call>
 
     <!-- =========================================================== -->
     <!-- extra options                                               -->
