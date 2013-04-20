@@ -25,7 +25,10 @@ default["jetty"]["java_options"] = %w{
   -Xmx2048m 
   -Xmn512m 
   -XX:+UseConcMarkSweepGC
-  -XX:+ExplicitGCInvokesConcurrent}
+  -XX:+ExplicitGCInvokesConcurrent
+  -Dlogback.configurationFile=/etc/tealium/urest/logger.xml
+}
+
 default["jetty"]["mongo_host"] = ""
 
 default["jetty"]["user"] = "jetty"
