@@ -20,6 +20,7 @@ default["jetty"]["host"] = "0.0.0.0"
 default["jetty"]["port"] = "8085"
 default["jetty"]["no_start"] = 0
 default["jetty"]["jetty_args"] = ""
+default["jetty"]["maxFormContentSize"] = "1500000"
 default["jetty"]["java_options"] = %w{
   --exec 
   -Xmx2048m 
@@ -36,6 +37,7 @@ default["jetty"]["group"] = "jetty"
 
 default["jetty"]["java_environment_variables"]["java.net.preferIPv4Stack"] = "true"
 default["jetty"]["java_environment_variables"]["java.awt.headless"] = "true"
+
 
 default["jetty"]["jetty_version"] = "jetty-hightide-8.1.7.v20120910"
 #default["jetty"]["jetty_url"] = "http://download.eclipse.org/jetty/8.1.7.v20120910/dist/jetty-distribution-8.1.7.v20120910.tar.gz"
