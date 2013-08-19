@@ -17,8 +17,17 @@
 # limitations under the License.
 
 include_recipe "java"
+include_recipe "apt"
 
-opt_dir = "/opt/"
+opt_dir = "/opt/jetty"
+
+[
+  "jetty-hightide-server"
+].each { |pak|
+   package pak  do
+      action :install
+   end
+}
 
 #creating a user to run under Jetty
 user node[:jetty][:user] do
@@ -28,43 +37,6 @@ end
 
 group node[:jetty][:group] do
   members [ node[:jetty][:group]]
-end
-
-#creating the necessary directories that Jetty will need to be installed correctly
-[ node[:jetty][:log_dir], node[:jetty][:contexts_dir], node[:jetty][:config_dir], node[:jetty][:lib_dir] ].each do |dir|
-    directory dir do
-     mode 0775
-     owner node[:jetty][:user]
-     group node[:jetty][:group]
-     recursive true
-    action :create
-  end
-end
-
-#downloading the Jetty .tar file from URL link we specified in the Attribute file
-remote_file "#{opt_dir}#{node[:jetty][:jetty_version]}.tar.gz" do
-  source node[:jetty][:jetty_url]
-  mode 0775
-  action :create_if_missing
-end
-
-
-#running a bash script to untar the .tar.gz Jetty file and move directories to appropriate locations
-bash "Installing Jetty 8 because Tealium is the bomb" do
-  user "root"
-  cwd "/opt"
-  code <<-BASH_SCRIPT
-  tar xfz #{node[:jetty][:jetty_version]}.tar.gz
-  cd #{node[:jetty][:jetty_version]}
-  mv #{opt_dir}#{node[:jetty][:jetty_version]}/logs #{node[:jetty][:log_dir]}
-  mv #{opt_dir}#{node[:jetty][:jetty_version]}/etc/* #{node[:jetty][:config_dir]}
-  rm -rf  #{opt_dir}#{node[:jetty][:jetty_version]}/etc
-  mv #{opt_dir}#{node[:jetty][:jetty_version]}/webapps #{node[:jetty][:webapps_dir]}
-  mv #{opt_dir}#{node[:jetty][:jetty_version]}/contexts #{node[:jetty][:contexts_dir]}
-  BASH_SCRIPT
-  not_if do
-    File.exists?("/opt/#{node[:jetty][:jetty_version]}")
-  end
 end
 
 #remove all but a few files in the webapps folder.
@@ -79,56 +51,7 @@ bash "Removing files from webapps" do
 end
 
 
-#changing the directory user to jetty 
-[ node[:jetty][:config_dir], node[:jetty][:webapps_dir], node[:jetty][:contexts_dir], opt_dir + node[:jetty][:jetty_version] ].each do |dir|
-  directory dir do
-    mode 0775
-    owner node[:jetty][:user]
-    group node[:jetty][:group]
-     recursive true
-  end
-end
-
-#creating symbolic link
-#link opt_dir + node[:jetty][:jetty_version] + "/contexts" do
-#  to node[:jetty][:context_dir]
-#end
-
-
-#creating symbolic links so all Jetty files point to /opt/Jetty-version
-link opt_dir + node[:jetty][:jetty_version] + "/logs"  do
-  to node[:jetty][:log_dir]
-  owner node[:jetty][:user]
-  group node[:jetty][:group]
-end
-
-#creating symbolic link
-link opt_dir + node[:jetty][:jetty_version] + "/webapps"  do
-  to node[:jetty][:webapps_dir]
-  owner node[:jetty][:user]
-  group node[:jetty][:group]
-end
-
-#creating symbolic link
-link opt_dir + node[:jetty][:jetty_version] + "/etc"  do
-  to node[:jetty][:config_dir]
-  owner node[:jetty][:user]
-  group node[:jetty][:group]
-end
-
-link node[:jetty][:jetty_service] + "/jetty" do
-  to opt_dir + node[:jetty][:jetty_version] + "/bin/jetty.sh"
-  owner node[:jetty][:user]
-  group node[:jetty][:group]
-end
-
-link opt_dir + "/jetty" do
-  to opt_dir + node[:jetty][:jetty_version]
-  owner node[:jetty][:user]
-  group node[:jetty][:group]
-end
-
-template opt_dir + node[:jetty][:jetty_version] + "/etc/jetty.xml"  do
+template opt_dir + "/etc/jetty.xml"  do
   source "jetty_config_xml.erb"
   owner node[:jetty][:user]
   group node[:jetty][:group]
@@ -138,7 +61,7 @@ template opt_dir + node[:jetty][:jetty_version] + "/etc/jetty.xml"  do
   )
 end
 
-template opt_dir + node[:jetty][:jetty_version] + "/start.ini"  do
+template opt_dir + "/start.ini"  do
   source "jetty_java_options.erb"
   owner node[:jetty][:user]
   group node[:jetty][:group]
@@ -149,6 +72,29 @@ template opt_dir + node[:jetty][:jetty_version] + "/start.ini"  do
   )
 end
 
+if !File.symlink?("/etc/jetty/")
+  
+  directory "/etc/jetty" do
+    action :delete
+  end
+
+  link "/etc/jetty" do
+    to opt_dir + "/etc" 
+    link_type :symbolic
+    action :create
+  end
+
+end
+
+#changing the directory user to jetty 
+[ node[:jetty][:config_dir], node[:jetty][:webapps_dir], node[:jetty][:contexts_dir], opt_dir ].each do |dir|
+  directory dir do
+    mode 0775
+    owner node[:jetty][:user]
+    group node[:jetty][:group]
+     recursive true
+  end
+end
 
 ENV['MONGO_HOST'] = node[:jetty][:mongo_host]
 
