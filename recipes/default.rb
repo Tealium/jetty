@@ -76,9 +76,10 @@ if !File.symlink?("/etc/jetty/")
   
   directory "/etc/jetty" do
     action :delete
+    recursive true
   end
 
-  link "/etc/jetty" do
+  link node[:jetty][:config_dir] do
     to opt_dir + "/etc" 
     link_type :symbolic
     action :create
@@ -87,7 +88,7 @@ if !File.symlink?("/etc/jetty/")
 end
 
 #changing the directory user to jetty 
-[ node[:jetty][:config_dir], node[:jetty][:webapps_dir], node[:jetty][:contexts_dir], opt_dir ].each do |dir|
+[ opt_dir ].each do |dir|
   directory dir do
     mode 0775
     owner node[:jetty][:user]
