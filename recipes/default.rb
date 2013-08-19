@@ -87,21 +87,21 @@ if !File.symlink?("/etc/jetty/")
 
 end
 
-#changing the directory user to jetty 
-[ opt_dir ].each do |dir|
-  directory dir do
-    mode 0775
-    owner node[:jetty][:user]
-    group node[:jetty][:group]
-     recursive true
-  end
+ruby_block "update_opt_owner" do
+   block do
+      FileUtils.chown_R node[:jetty][:user], node[:jetty][:group], opt_dir
+   end
+   action :nothing
 end
 
 ENV['MONGO_HOST'] = node[:jetty][:mongo_host]
 
+
+
 service "jetty" do
   service_name "jetty"
   supports :restart => true, :status => true
+  notifies :create, "ruby_block[update_opt_owner]", :immediately
   action [:enable, :start]
 end
 
