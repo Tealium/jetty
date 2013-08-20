@@ -16,6 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include_recipe "jetty::remove_old"
 include_recipe "java"
 include_recipe "apt"
 
@@ -72,20 +73,31 @@ template opt_dir + "/start.ini"  do
   )
 end
 
-if !File.symlink?("/etc/jetty/")
-  
-  directory "/etc/jetty" do
-    action :delete
-    recursive true
-  end
 
   link node[:jetty][:config_dir] do
-    to opt_dir + "/etc" 
+    to "/opt/jetty/etc" 
     link_type :symbolic
+    owner node[:jetty][:user]
+    group node[:jetty][:group]
     action :create
   end
 
-end
+  link node[:jetty][:webapps_dir] do
+    to "/opt/jetty/webapps" 
+    link_type :symbolic
+    owner node[:jetty][:user]
+    group node[:jetty][:group]
+    action :create
+  end
+
+  link "/var/log/jetty" do
+    to "/opt/jetty/logs" 
+    link_type :symbolic
+    owner node[:jetty][:user]
+    group node[:jetty][:group]
+    action :create
+  end
+
 
 ruby_block "update_opt_owner" do
    block do
