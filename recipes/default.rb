@@ -40,17 +40,6 @@ group node[:jetty][:group] do
   members [ node[:jetty][:group]]
 end
 
-#remove all but a few files in the webapps folder.
-bash "Removing files from webapps" do
-  user "root"
-  cwd "/opt"
-  code <<-BASH_SCRIPT
-  cd #{node[:jetty][:webapps_dir]}
-  rm -rf root
-  rm -rf test-*
-  BASH_SCRIPT
-end
-
 
 template opt_dir + "/etc/jetty.xml"  do
   source "jetty_config_xml.erb"
@@ -73,31 +62,24 @@ template opt_dir + "/start.ini"  do
   )
 end
 
-
-  link node[:jetty][:config_dir] do
-    to "/opt/jetty/etc" 
+  link "/var/log/jetty"  do
+    to opt_dir + "/logs"
     link_type :symbolic
     owner node[:jetty][:user]
     group node[:jetty][:group]
     action :create
   end
 
-  link node[:jetty][:webapps_dir] do
-    to "/opt/jetty/webapps" 
-    link_type :symbolic
-    owner node[:jetty][:user]
-    group node[:jetty][:group]
-    action :create
-  end
-
-  link "/var/log/jetty" do
-    to "/opt/jetty/logs" 
-    link_type :symbolic
-    owner node[:jetty][:user]
-    group node[:jetty][:group]
-    action :create
-  end
-
+#remove all but a few files in the webapps folder.
+bash "Removing files from webapps" do
+  user "root"
+  cwd "/opt"
+  code <<-BASH_SCRIPT
+  cd #{node[:jetty][:webapps_dir]}
+  rm -rf root
+  rm -rf test-*
+  BASH_SCRIPT
+end
 
 ruby_block "update_opt_owner" do
    block do

@@ -45,10 +45,10 @@ default["jetty"]["jetty_url"] = "http://dist.codehaus.org/jetty/jetty-hightide-8
 
 case platform
 when "ubuntu", "debian"
-  default["jetty"]["log_dir"] = "/var/log/jetty"
-  default["jetty"]["webapps_dir"] = "/var/lib/jetty/webapps"
-  default["jetty"]["config_dir"] = "/etc/jetty"
-  default["jetty"]["contexts_dir"] = "/etc/jetty/contexts"
+  default["jetty"]["log_dir"] = "/opt/jetty/logs"
+  default["jetty"]["webapps_dir"] = "/opt/jetty/webapps"
+  default["jetty"]["config_dir"] = "/opt/jetty"
+  default["jetty"]["contexts_dir"] = "/opt/jetty/contexts"
   default["jetty"]["lib_dir"] = "/var/lib/jetty"
   default["jetty"]["jetty_service"] = "/etc/init.d"
 else
