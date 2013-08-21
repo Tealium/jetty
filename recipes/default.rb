@@ -62,22 +62,32 @@ template opt_dir + "/start.ini"  do
   )
 end
 
-  link "/var/log/jetty"  do
-    to opt_dir + "/logs"
-    link_type :symbolic
-    owner node[:jetty][:user]
-    group node[:jetty][:group]
-    action :create
-  end
+#creating symbolic links so all Jetty files point to /opt/Jetty-version
+link node[:jetty][:log_dir]  do
+  to opt_dir + "/logs"
+  owner node[:jetty][:user]
+  group node[:jetty][:group]
+end
+
+link node[:jetty][:jetty_service] + "/jetty" do
+  to opt_dir + "/bin/jetty.sh"
+  owner node[:jetty][:user]
+  group node[:jetty][:group]
+end
 
 #remove all but a few files in the webapps folder.
 bash "Removing files from webapps" do
   user "root"
   cwd "/opt"
   code <<-BASH_SCRIPT
+  cd #{node[:jetty][:contexts_dir]}
+  rm -rf *
   cd #{node[:jetty][:webapps_dir]}
+  rm -rf *test*
+  rm -rf *rest*
   rm -rf root
-  rm -rf test-*
+  rm -rf cometd.war
+  rm -rf spdy.war
   BASH_SCRIPT
 end
 
