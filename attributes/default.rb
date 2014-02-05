@@ -28,6 +28,10 @@ default["jetty"]["java_options"] = %w{
   -XX:+UseConcMarkSweepGC
   -XX:+ExplicitGCInvokesConcurrent
   -Dlogback.configurationFile=/etc/tealium/urest/logger.xml
+  -Dcom.sun.management.jmxremote.authenticate=false
+  -Djava.rmi.server.hostname=localhost
+  -Dcom.tealium.management.jmxremote.registry.port=9001
+  -Dcom.tealium.management.jmxremote.server.port=9001
 }
 
 default["jetty"]["mongo_host"] = ""
