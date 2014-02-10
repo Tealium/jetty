@@ -21,18 +21,18 @@ default["jetty"]["port"] = "8085"
 default["jetty"]["no_start"] = 0
 default["jetty"]["jetty_args"] = ""
 default["jetty"]["maxFormContentSize"] = "1500000"
-default["jetty"]["java_options"] = %w{
-  --exec 
-  -Xmx2048m 
-  -Xmn512m 
-  -XX:+UseConcMarkSweepGC
-  -XX:+ExplicitGCInvokesConcurrent
-  -Dlogback.configurationFile=/etc/tealium/urest/logger.xml
-  -Dcom.sun.management.jmxremote.authenticate=false
-  -Djava.rmi.server.hostname=localhost
-  -Dcom.tealium.management.jmxremote.registry.port=9001
-  -Dcom.tealium.management.jmxremote.server.port=9001
-}
+
+default["jetty"]["java_options"]["--exec"] = true
+default["jetty"]["java_options"]["-Xmx2048m"] = true
+default["jetty"]["java_options"]["-Xmn512m"] = true
+default["jetty"]["java_options"]["-XX:+UseConcMarkSweepGC"] = true
+default["jetty"]["java_options"]["-XX:+ExplicitGCInvokesConcurrent"] = true
+default["jetty"]["java_options"]["-Dlogback.configurationFile=/etc/tealium/urest/logger.xml"] = true
+default["jetty"]["java_options"]["-Dcom.sun.management.jmxremote.authenticate=false"] = true
+default["jetty"]["java_options"]["-Djava.rmi.server.hostname=localhost"] = true
+default["jetty"]["java_options"]["-Dcom.tealium.management.jmxremote.registry.port=9001"] = true
+default["jetty"]["java_options"]["-Dcom.tealium.management.jmxremote.server.port=9001"] = true
+
 
 default["jetty"]["mongo_host"] = ""
 
