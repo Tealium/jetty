@@ -17,8 +17,10 @@
 #
 # Below are some recommended options for Sun's JRE
 #-----------------------------------------------------------
-<% @jetty_java_options.each do |arg| %>
+<% @jetty_java_options.sort.each do |arg, enabled| %>
+  <% if enabled %>
 <%= arg %>
+  <% end %>
 <% end %>
 <% @jetty_environment_var.each do |key, value| %>
 -D<%= key %>=<%=value%>
