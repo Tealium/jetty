@@ -138,6 +138,13 @@ template opt_dir + node[:jetty][:jetty_version] + "/etc/jetty.xml"  do
   )
 end
 
+template opt_dir + node[:jetty][:jetty_version] + "/etc/jetty-rewrite.xml" do
+  source "jetty_rewrite_xml.erb"
+  owner node[:jetty][:user]
+  group node[:jetty][:group]
+  mode "0775"
+end
+
 template opt_dir + node[:jetty][:jetty_version] + "/start.ini"  do
   source "jetty_java_options.erb"
   owner node[:jetty][:user]
