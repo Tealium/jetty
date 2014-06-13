@@ -51,6 +51,17 @@
         </Arg>
       </Call>
 
+      <!-- X-XSS-Protection -->
+      <Call name="addRule">
+        <Arg>
+          <New class="org.eclipse.jetty.rewrite.handler.HeaderPatternRule">
+            <Set name="pattern">/*</Set>
+            <Set name="name">X-XSS-Protection</Set>
+            <Set name="value">1;mode=block</Set>
+          </New>
+        </Arg>
+      </Call>
+
      </New>
     </Set>
 
