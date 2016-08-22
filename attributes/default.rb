@@ -33,6 +33,10 @@ default["jetty"]["java_options"]["-Djava.rmi.server.hostname=localhost"] = true
 default["jetty"]["java_options"]["-Dcom.tealium.management.jmxremote.registry.port=9001"] = true
 default["jetty"]["java_options"]["-Dcom.tealium.management.jmxremote.server.port=9001"] = true
 
+# Fix for foreign-language characters issues.
+default["jetty"]["java_options"]["-Dfile.encoding=UTF-8"] = true
+default["jetty"]["java_options"]["-Duser.language=en"] = true
+default["jetty"]["java_options"]["-Duser.country=US"] = true
 
 default["jetty"]["mongo_host"] = ""
 
