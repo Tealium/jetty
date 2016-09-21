@@ -79,7 +79,7 @@ bash "Removing files from webapps" do
 end
 
 
-#changing the directory user to jetty 
+#changing the directory user to jetty
 [ node[:jetty][:config_dir], node[:jetty][:webapps_dir], node[:jetty][:contexts_dir], opt_dir + node[:jetty][:jetty_version] ].each do |dir|
   directory dir do
     mode 0775
@@ -145,18 +145,6 @@ template opt_dir + node[:jetty][:jetty_version] + "/etc/jetty-rewrite.xml" do
   mode "0775"
 end
 
-template opt_dir + node[:jetty][:jetty_version] + "/start.ini"  do
-  source "jetty_java_options.erb"
-  owner node[:jetty][:user]
-  group node[:jetty][:group]
-  mode "0775"
-  variables(
-    :jetty_java_options => node[:jetty][:java_options],
-    :jetty_environment_var => node[:jetty][:java_environment_variables]
-  )
-end
-
-
 ENV['MONGO_HOST'] = node[:jetty][:mongo_host]
 
 service "jetty" do
@@ -164,4 +152,3 @@ service "jetty" do
   supports :restart => true, :status => true
   action [:enable, :start]
 end
-
